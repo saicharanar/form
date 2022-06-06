@@ -3,7 +3,25 @@ const { Form } = require('./Form');
 const questions = {
   name: 'Please enter your name',
   dob: 'Please enter your dob YYYY-MM-DD',
-  hobbies: 'Please enter your hobbies',
+  hobbies: 'Please enter your hobbies (separated by commas -,-)',
+};
+
+const dobParser = (data) => {
+  const currentData = data.split('-');
+  const validState = currentData.every((number) => isFinite(number));
+
+  if (validState) {
+    return currentData;
+  }
+  return;
+};
+
+const hobbiesParser = (data) => {
+  const currentData = data.split(',');
+  if (currentData.length < 1) {
+    return;
+  }
+  return currentData;
 };
 
 const includesNumber = (data) => {
@@ -36,7 +54,7 @@ const parse = (query, data) => {
 const getUserResponse = (form) => {
   const currentQuery = form.currentQuery();
   console.log(questions[currentQuery]);
-  process.stdin('data', (chunk) => {
+  process.stdin.on('data', (chunk) => {
     form.receiveResponse(currentQuery, parse(currentQuery, chunk));
     if (form.isAllResponsesReceived()) {
       process.stdin.emit('closed');

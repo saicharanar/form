@@ -19,7 +19,7 @@ class Form {
   }
 
   isAllResponsesReceived() {
-    return this.#queries.some((query) => {
+    return this.#queries.every((query) => {
       return query.answer;
     });
   }
