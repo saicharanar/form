@@ -18,7 +18,7 @@ const dobParser = (data) => {
 
 const hobbiesParser = (data) => {
   const currentData = data.split(',');
-  if (currentData.length < 1) {
+  if (currentData.length === 0) {
     return;
   }
   return currentData;
@@ -52,13 +52,16 @@ const parse = (query, data) => {
 };
 
 const getUserResponse = (form) => {
-  const currentQuery = form.currentQuery();
+  let currentQuery = form.currentQuery();
   console.log(questions[currentQuery]);
+  process.stdin.setEncoding('utf8');
   process.stdin.on('data', (chunk) => {
     form.receiveResponse(currentQuery, parse(currentQuery, chunk));
     if (form.isAllResponsesReceived()) {
       process.stdin.emit('closed');
     }
+    currentQuery = form.currentQuery();
+    console.log(questions[currentQuery]);
   });
 
   process.stdin.on('closed', () => {
