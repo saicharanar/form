@@ -1,26 +1,8 @@
 const { Form } = require('./Form');
 const fs = require('fs');
 
-const findValue = (queries, query) => {
-  return queries.find((currentQuery) => currentQuery.query === query).answer;
-};
-
-const createObject = (queries) => {
-  const name = findValue(queries, 'name');
-  const dob = findValue(queries, 'dob').join('-');
-  const hobbies = findValue(queries, 'hobbies');
-  const ph_no = findValue(queries, 'ph_no');
-  const addressLine1 = findValue(queries, 'addressLine1');
-  const addressLine2 = findValue(queries, 'addressLine2');
-
-  const address = [addressLine1, addressLine2].join('\n');
-  return { name, dob, hobbies, ph_no, address };
-};
-
-const writeToJson = (queries) => {
-  const queryObj = createObject(queries);
-  const data = JSON.stringify(queryObj);
-  fs.writeFileSync('./queryData.json', data, 'utf-8');
+const writeToJson = (form) => {
+  fs.writeFileSync('./queryData.json', form.toString(), 'utf-8');
 };
 
 const questions = {
@@ -90,7 +72,7 @@ const getUserResponse = (form) => {
 
   process.stdin.on('closed', () => {
     console.log('Thank You');
-    writeToJson(form.allQueries());
+    writeToJson(form);
     process.exit(0);
   });
 };

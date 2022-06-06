@@ -1,3 +1,19 @@
+const findValue = (queries, query) => {
+  return queries.find((currentQuery) => currentQuery.query === query).answer;
+};
+
+const createObject = (queries) => {
+  const name = findValue(queries, 'name');
+  const dob = findValue(queries, 'dob').join('-');
+  const hobbies = findValue(queries, 'hobbies');
+  const ph_no = findValue(queries, 'ph_no');
+  const addressLine1 = findValue(queries, 'addressLine1');
+  const addressLine2 = findValue(queries, 'addressLine2');
+
+  const address = [addressLine1, addressLine2].join('\n');
+  return { name, dob, hobbies, ph_no, address };
+};
+
 class Form {
   #queries;
   constructor(queries) {
@@ -24,8 +40,9 @@ class Form {
     });
   }
 
-  allQueries() {
-    return this.#queries;
+  toString() {
+    const queryObj = createObject(this.#queries);
+    return JSON.stringify(queryObj);
   }
 }
 
