@@ -24,8 +24,8 @@ class Form {
     });
   }
 
-  toString() {
-    return JSON.stringify(this.#queries);
+  allQueries() {
+    return this.#queries;
   }
 }
 
