@@ -13,7 +13,7 @@ const createObject = (queries) => {
   const addressLine1 = findValue(queries, 'addressLine1');
   const addressLine2 = findValue(queries, 'addressLine2');
 
-  const address = [addressLine1, addressLine2].join('\n');
+  const address = [addressLine1, addressLine2].join(' ');
   return { name, dob, hobbies, ph_no, address };
 };
 

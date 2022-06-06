@@ -1,1 +1,9 @@
-{"name":"cherry","dob":"1-1-1","hobbies":["game"],"ph_no":"1234567890","address":"krmbng"}
+{
+  "name": "cherry",
+  "dob": "1-1-1",
+  "hobbies": [
+    "game"
+  ],
+  "ph_no": "1234567890",
+  "address": "krm\nbng"
+}
