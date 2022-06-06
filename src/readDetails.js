@@ -6,6 +6,22 @@ const questions = {
   hobbies: 'Please enter your hobbies',
 };
 
+const includesNumber = (data) => {
+  /.*[0-9]+.*/.test(data);
+};
+
+const nameParser = (data) => {
+  if (data.length <= 5) {
+    return;
+  }
+
+  if (includesNumber(data)) {
+    return;
+  }
+
+  return data;
+};
+
 const parse = (query, data) => {
   const parsers = {
     name: nameParser,
@@ -29,6 +45,7 @@ const getUserResponse = (form) => {
 
   process.stdin.on('closed', () => {
     console.log('Thank You');
+    process.exit(0);
   });
 };
 
