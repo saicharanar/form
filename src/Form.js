@@ -9,7 +9,7 @@ class Form {
       (currentQuery) => currentQuery.query === query
     );
 
-    currentQuery.answer = answer;
+    currentQuery.answer = currentQuery.parser(answer.slice(0, -1));
   }
 
   currentQuery() {

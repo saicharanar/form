@@ -40,24 +40,13 @@ const nameParser = (data) => {
   return data;
 };
 
-const parse = (query, data) => {
-  const parsers = {
-    name: nameParser,
-    dob: dobParser,
-    hobbies: hobbiesParser,
-  };
-
-  const parser = parsers[query];
-  return parser(data.slice(0, -1));
-};
-
 const getUserResponse = (form) => {
   let currentQuery = form.currentQuery();
   console.log(questions[currentQuery]);
   process.stdin.setEncoding('utf8');
 
   process.stdin.on('data', (chunk) => {
-    form.receiveResponse(currentQuery, parse(currentQuery, chunk));
+    form.receiveResponse(currentQuery, chunk);
     if (form.isAllResponsesReceived()) {
       process.stdin.emit('closed');
     }
@@ -73,7 +62,11 @@ const getUserResponse = (form) => {
 };
 
 const main = () => {
-  const queries = [{ query: 'name' }, { query: 'dob' }, { query: 'hobbies' }];
+  const queries = [
+    { query: 'name', parser: nameParser },
+    { query: 'dob', parser: dobParser },
+    { query: 'hobbies', parser: hobbiesParser },
+  ];
 
   const form = new Form(queries);
   getUserResponse(form);
