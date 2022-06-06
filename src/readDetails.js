@@ -17,11 +17,10 @@ const dobParser = (data) => {
 };
 
 const hobbiesParser = (data) => {
-  const currentData = data.split(',');
-  if (currentData.length === 0) {
+  if (data.length < 1) {
     return;
   }
-  return currentData;
+  return data.split('-');
 };
 
 const includesNumber = (data) => {
@@ -55,8 +54,9 @@ const getUserResponse = (form) => {
   let currentQuery = form.currentQuery();
   console.log(questions[currentQuery]);
   process.stdin.setEncoding('utf8');
+
   process.stdin.on('data', (chunk) => {
-    form.receiveResponse(currentQuery, parse(currentQuery, chunk));
+    form.receiveResponse(currentQuery, parse(currentQuery, chunk.slice(0, -1)));
     if (form.isAllResponsesReceived()) {
       process.stdin.emit('closed');
     }
