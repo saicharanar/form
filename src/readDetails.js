@@ -1,4 +1,5 @@
 const { Form } = require('./Form');
+const fs = require('fs');
 
 const questions = {
   name: 'Please enter your name',
@@ -47,7 +48,7 @@ const parse = (query, data) => {
   };
 
   const parser = parsers[query];
-  return parser(data);
+  return parser(data.slice(0, -1));
 };
 
 const getUserResponse = (form) => {
@@ -56,7 +57,7 @@ const getUserResponse = (form) => {
   process.stdin.setEncoding('utf8');
 
   process.stdin.on('data', (chunk) => {
-    form.receiveResponse(currentQuery, parse(currentQuery, chunk.slice(0, -1)));
+    form.receiveResponse(currentQuery, parse(currentQuery, chunk));
     if (form.isAllResponsesReceived()) {
       process.stdin.emit('closed');
     }
@@ -66,6 +67,7 @@ const getUserResponse = (form) => {
 
   process.stdin.on('closed', () => {
     console.log('Thank You');
+    fs.writeFileSync('./queryData', form.toString(), 'utf8');
     process.exit(0);
   });
 };
