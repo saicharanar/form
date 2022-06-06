@@ -5,11 +5,17 @@ class Form {
   }
 
   receiveResponse(query, answer) {
-    const answeredQuery = this.#queries.find(
+    const currentQuery = this.#queries.find(
       (currentQuery) => currentQuery.query === query
     );
 
-    answeredQuery.answer = answer;
+    currentQuery.answer = answer;
+  }
+
+  currentQuery() {
+    return this.#queries.find((query) => {
+      return !query.answer;
+    }).query;
   }
 
   isAllResponsesReceived() {

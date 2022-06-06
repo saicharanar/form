@@ -6,25 +6,29 @@ const questions = {
   hobbies: 'Please enter your hobbies',
 };
 
-const getUserResponses = (form, queries) => {
-  let index = 0;
+const parse = (query, data) => {
+  const parsers = {
+    name: nameParser,
+    dob: dobParser,
+    hobbies: hobbiesParser,
+  };
 
-  process.stdin.on('data', (chunk) => {
-    const currentQuery = queries[index];
-    console.log(questions[currentQuery.query]);
-    form.receiveResponse(currentQuery);
-    currentQuery.answer = chunk;
-    index++;
+  const parser = parsers[query];
+  return parser(data);
+};
 
-    if (index === 4) {
+const getUserResponse = (form) => {
+  const currentQuery = form.currentQuery();
+  console.log(questions[currentQuery]);
+  process.stdin('data', (chunk) => {
+    form.receiveResponse(currentQuery, parse(currentQuery, chunk));
+    if (form.isAllResponsesReceived()) {
       process.stdin.emit('closed');
     }
   });
 
   process.stdin.on('closed', () => {
     console.log('Thank You');
-    console.log(form + '');
-    process.exit(0);
   });
 };
 
@@ -32,7 +36,7 @@ const main = () => {
   const queries = [{ query: 'name' }, { query: 'dob' }, { query: 'hobbies' }];
 
   const form = new Form(queries);
-  getUserResponses(form, queries);
+  getUserResponse(form);
 };
 
 main();
