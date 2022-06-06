@@ -20,7 +20,7 @@ const createObject = (queries) => {
 const writeToJson = (queries) => {
   const queryObj = createObject(queries);
   const data = JSON.stringify(queryObj);
-  fs.writeFileSync('./queryData', data, 'utf-8');
+  fs.writeFileSync('./queryData.json', data, 'utf-8');
 };
 
 const questions = {
