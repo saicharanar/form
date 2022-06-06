@@ -17,6 +17,10 @@ class Form {
       return query.answer;
     });
   }
+
+  toString() {
+    return JSON.stringify(this.#queries);
+  }
 }
 
 exports.Form = Form;
