@@ -20,7 +20,7 @@ class Form {
     this.#queries = queries;
   }
 
-  receiveResponse(query, answer) {
+  receiveResponse(answer) {
     const currentQuery = this.currentQuery();
     currentQuery.answer = currentQuery.parser(answer.slice(0, -1));
   }
