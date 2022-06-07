@@ -5,20 +5,11 @@ const writeToJson = (form) => {
   fs.writeFileSync('./queryData.json', form.toString(), 'utf-8');
 };
 
-const questions = {
-  name: 'Please enter your name',
-  dob: 'Please enter your dob YYYY-MM-DD',
-  hobbies: 'Please enter your hobbies (separated by commas -,-)',
-  ph_no: 'Please enter your ph_no',
-  addressLine1: 'Enter address line 1',
-  addressLine2: 'Enter address line 2',
-};
-
-const noParser = (data) => data;
+const identity = (data) => data;
 
 const phNumberParser = (data) => {
   if (data.length < 10) {
-    return undefined;
+    return;
   }
   return data;
 };
@@ -58,19 +49,19 @@ const nameParser = (data) => {
 
 const getUserResponse = (form) => {
   let currentQuery = form.currentQuery();
-  console.log(questions[currentQuery]);
+  console.log(currentQuery.question);
   process.stdin.setEncoding('utf8');
 
   process.stdin.on('data', (chunk) => {
-    form.receiveResponse(currentQuery, chunk);
+    form.receiveResponse(chunk);
     if (form.isAllResponsesReceived()) {
-      process.stdin.emit('closed');
+      process.stdin.emit('close');
     }
     currentQuery = form.currentQuery();
-    console.log(questions[currentQuery]);
+    console.log(currentQuery.question);
   });
 
-  process.stdin.on('closed', () => {
+  process.stdin.on('close', () => {
     console.log('Thank You');
     writeToJson(form);
     process.exit(0);
@@ -79,12 +70,36 @@ const getUserResponse = (form) => {
 
 const main = () => {
   const queries = [
-    { query: 'name', parser: nameParser },
-    { query: 'dob', parser: dobParser },
-    { query: 'hobbies', parser: hobbiesParser },
-    { query: 'ph_no', parser: phNumberParser },
-    { query: 'addressLine1', parser: noParser },
-    { query: 'addressLine2', parser: noParser },
+    {
+      query: 'name',
+      parser: nameParser,
+      question: 'Please enter your name',
+    },
+    {
+      query: 'dob',
+      parser: dobParser,
+      question: 'Please enter your dob YYYY-MM-DD',
+    },
+    {
+      query: 'hobbies',
+      parser: hobbiesParser,
+      question: 'Please enter your hobbies (separated by commas -,-)',
+    },
+    {
+      query: 'ph_no',
+      parser: phNumberParser,
+      question: 'Please enter your ph_no',
+    },
+    {
+      query: 'addressLine1',
+      parser: identity,
+      question: 'Enter address line 1',
+    },
+    {
+      query: 'addressLine2',
+      parser: identity,
+      question: 'Enter address line 2',
+    },
   ];
 
   const form = new Form(queries);

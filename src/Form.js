@@ -21,17 +21,14 @@ class Form {
   }
 
   receiveResponse(query, answer) {
-    const currentQuery = this.#queries.find(
-      (currentQuery) => currentQuery.query === query
-    );
-
+    const currentQuery = this.currentQuery();
     currentQuery.answer = currentQuery.parser(answer.slice(0, -1));
   }
 
   currentQuery() {
     return this.#queries.find((query) => {
       return !query.answer;
-    }).query;
+    });
   }
 
   isAllResponsesReceived() {
