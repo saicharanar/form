@@ -1,5 +1,6 @@
 const { Form } = require('./Form');
 const fs = require('fs');
+const { Stream } = require('stream');
 
 const writeToJson = (form) => {
   fs.writeFileSync('./queryData.json', form.toString(), 'utf-8');
@@ -47,24 +48,31 @@ const nameParser = (data) => {
   return data;
 };
 
+const closeStream = (form) => {
+  console.log('Thank You');
+  writeToJson(form);
+  process.stdin.destroy();
+};
+
+const registerResponses = (response, form) => {
+  form.receiveResponse(response);
+
+  if (form.isAllResponsesReceived()) {
+    closeStream(form);
+    return;
+  }
+
+  currentQuery = form.currentQuery();
+  console.log(currentQuery.question);
+};
+
 const getUserResponse = (form) => {
   let currentQuery = form.currentQuery();
   console.log(currentQuery.question);
+
   process.stdin.setEncoding('utf8');
-
-  process.stdin.on('data', (chunk) => {
-    form.receiveResponse(chunk);
-    if (form.isAllResponsesReceived()) {
-      process.stdin.emit('close');
-    }
-    currentQuery = form.currentQuery();
-    console.log(currentQuery.question);
-  });
-
-  process.stdin.on('close', () => {
-    console.log('Thank You');
-    writeToJson(form);
-    process.exit(0);
+  process.stdin.on('data', (response) => {
+    registerResponses(response, form);
   });
 };
 
