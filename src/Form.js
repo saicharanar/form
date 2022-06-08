@@ -2,6 +2,33 @@ const findValue = (queries, query) => {
   return queries.find((currentQuery) => currentQuery.query === query).answer;
 };
 
+class Field {
+  #prompt;
+  #query;
+  #response;
+  constructor(prompt, query) {
+    this.#prompt = prompt;
+    this.#query = query;
+    this.#response = null;
+  }
+
+  fill(response) {
+    this.#response = response;
+  }
+
+  isFilled() {
+    return this.#response !== null;
+  }
+
+  equals(otherField) {
+    return (
+      otherField instanceof Field &&
+      this.#prompt === otherField.#prompt &&
+      this.#query === otherField.#query
+    );
+  }
+}
+
 const createObject = (queries) => {
   const name = findValue(queries, 'name');
   const dob = findValue(queries, 'dob').join('-');
@@ -43,4 +70,4 @@ class Form {
   }
 }
 
-exports.Form = Form;
+module.exports = { Form, Field };
