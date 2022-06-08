@@ -1,6 +1,5 @@
 const { Form } = require('./Form');
 const fs = require('fs');
-const { Stream } = require('stream');
 
 const writeToJson = (form) => {
   fs.writeFileSync('./queryData.json', form.toString(), 'utf-8');
@@ -66,16 +65,6 @@ const registerResponses = (response, form) => {
   console.log(currentQuery.question);
 };
 
-const getUserResponse = (form) => {
-  let currentQuery = form.currentQuery();
-  console.log(currentQuery.question);
-
-  process.stdin.setEncoding('utf8');
-  process.stdin.on('data', (response) => {
-    registerResponses(response, form);
-  });
-};
-
 const main = () => {
   const queries = [
     {
@@ -111,7 +100,14 @@ const main = () => {
   ];
 
   const form = new Form(queries);
-  getUserResponse(form);
+
+  let currentQuery = form.currentQuery();
+  console.log(currentQuery.question);
+
+  process.stdin.setEncoding('utf8');
+  process.stdin.on('data', (response) => {
+    registerResponses(response, form);
+  });
 };
 
 main();

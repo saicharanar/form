@@ -2,10 +2,10 @@
 
 ## TODO
 
+- [ ] Extract main from readDetails
 - [ ] Change the Form model to handle `index`
 - [ ] Inject log dependency
 - [ ] Consider changing the file name
-- [ ] Extract main from readDetails
 - [ ] Introduced Field class
 - [ ] Remove the domain dependency of Form
   - [ ] Remove the createObject function dependency in Form
@@ -14,3 +14,4 @@
 ## DONE
 
 - [x] Extract the call back function
+- [x] Combine the takeUserInput and main as one function
